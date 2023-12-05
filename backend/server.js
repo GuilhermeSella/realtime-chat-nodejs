@@ -1,17 +1,20 @@
 const express = require("express");
-const cors = require("cors");
-const router = require("./src/routes/router")
+const {createServer} = require("http")
+const {Server} = require("socket.io")
 
-const app = express();
-const port = 8000;
+const app = require("express");
+const httpServer = createServer(app)
+const io = new Server(httpServer, {cors:{origin:'*', methods:['GET', 'POST']}});
 
-app.use(express.json())
-app.use(cors({ origin:true }))
-app.use("", router);
+io.on("connection", socket => {
+    console.log(socket.id)
 
+    socket.on("set_username", data=>{
+        console.log(data)
+    })
 
-app.listen(port, (err)=>{
-    if(err) console.log(err)
+    socket.emit("hello", "Olá Cliente!")
 
-    console.log("Servidor rodando porta " + port)
 })
+
+httpServer.listen(8000);
