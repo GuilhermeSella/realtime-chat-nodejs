@@ -10,10 +10,17 @@ io.on("connection", socket => {
     console.log(socket.id)
 
     socket.on("set_username", data=>{
+        socket.data.username = data;
         console.log(data)
     })
 
-    socket.emit("hello", "Olá Cliente!")
+    socket.on("message-chat", textMessage =>{
+        io.emit("receive-message", {
+            textMessage,
+            author:socket.data.username,
+            authorId:socket.id
+        })
+    })
 
 })
 
