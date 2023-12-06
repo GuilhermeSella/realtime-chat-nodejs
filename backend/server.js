@@ -17,12 +17,18 @@ io.on("connection", socket => {
         }
         socket.data.username = data;
         socket.join(userConfig.room)
+        io.to(userConfig.room).emit("join-chat", `${userConfig.username} entrou no chat!`)
     })
 
     socket.on("message-chat", data =>{
         data.userId = socket.id;
         io.to(userConfig.room).emit("receive-message",data)
         console.log(data)
+    })
+
+    socket.on("leaving-room", data =>{
+        socket.leave(data.room);
+        io.to(data.room).emit("join-chat", `${data.username} saiu do chat!`)
     })
 
    

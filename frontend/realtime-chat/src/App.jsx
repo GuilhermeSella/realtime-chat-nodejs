@@ -30,7 +30,12 @@ function App() {
   return (
     <>
       {chatIsOpen ? 
-        <Chat  socket={socketChat} room={room_name.current.value} username={username.current.value}/>
+        <Chat  
+          socket={socketChat} 
+          setChatIsOpen={setChatIsOpen}
+          room={room_name.current.value} 
+          username={username.current.value}
+        />
       :
       <div>
           <h1>Realtime Chat</h1>

@@ -2,7 +2,7 @@ import React from 'react';
 import { useState,useEffect, useRef } from 'react';
 import { useParams } from 'react-router';
 import { io } from 'socket.io-client';
-function Chat({socket, username, room }) {
+function Chat({socket, username, room, setChatIsOpen }) {
 
     const [mensagensChat, setMensagensChat] = useState([]);
     const mensagemRef = useRef()
@@ -17,16 +17,31 @@ function Chat({socket, username, room }) {
         socket.emit("message-chat", mensagemConfig)
         mensagemRef.current.value = "";
       }
+      const exitRoom = ()=>{
+        const userConfig ={
+            username:username,
+            room:room
+        }
+        socket.emit("leaving-room", userConfig)
+        setChatIsOpen(false)
+      }
 
       useEffect(()=>{
 
         socket.on("receive-message", async(data) => {
             
           await setMensagensChat((current) => [...current, data] )
-          console.log(mensagensChat)
+        })
+        
+        socket.on("join-chat", async data =>{
+            await setMensagensChat((current) => [...current, data] )
+            
         })
     
-        return () => socket.off("receive-message");
+        return () => {
+            socket.off("receive-message")
+            socket.off("join-chat")
+        };
     
       }, [socket, mensagensChat])
 
@@ -38,13 +53,21 @@ function Chat({socket, username, room }) {
                 <input type="text" placeholder='Mensagem' ref={mensagemRef} />
                 <input type="submit" value="Enviar" />
             </form>
+            <button onClick={exitRoom}>Sair</button>
 
             {mensagensChat.map(message => (
-            <div key={message.key}>
-                <h2>{message.username}</h2>
-                <p>{message.mensagem}</p>
-            </div>
+                message instanceof Object ? (
+                    <div key={message.id}>
+                        <h2>{message.username}</h2>
+                        <h3>{message.mensagem}</h3>
+                    </div>
+                ) : (
+                    <div key={message.id}>
+                        <p>{message}</p>
+                    </div>
+                )
             ))}
+
 
       </div>
     );
