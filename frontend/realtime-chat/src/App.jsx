@@ -37,12 +37,27 @@ function App() {
           username={username.current.value}
         />
       :
-      <div>
-          <h1>Realtime Chat</h1>
-          <form  onSubmit={handleSubmit}>
-            <input type="text" placeholder='Digite uma sala' ref={room_name} />
-            <input type="text" placeholder='Digite seu usuário' ref={username} />
-            <input type="submit" value="Entrar" />
+      <div className='h-screen w-screen flex flex-col items-center justify-center gap-6 bg-slate-50/60'>
+          <h1 className='text-5xl font-Sans font-semibold text-purple-800'>Realtime Chat</h1>
+          <form onSubmit={handleSubmit} className='w-screen flex flex-col items-center gap-8 p-5  '>
+
+            <input 
+            className='w-full max-w-xl rounded-md border-0 py-3 px-4 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400  sm:text-sm sm:leading-6 ' 
+            type="text" 
+            placeholder='Digite uma sala' 
+            ref={room_name} />
+
+            <input 
+            className='w-full max-w-xl rounded-md border-0 py-3 px-4 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400  sm:text-sm sm:leading-6 ' 
+            type="text" 
+            placeholder='Digite seu usuário' 
+            ref={username} />
+
+            <input 
+            className='w-full max-w-xl bg-purple-800 cursor-pointer transition hover:bg-purple-800/80 text-white font-semibold text-base rounded-md border-0 py-3 px-4'
+            type="submit" 
+            value="Entrar" />
+
           </form>
       </div>
       }

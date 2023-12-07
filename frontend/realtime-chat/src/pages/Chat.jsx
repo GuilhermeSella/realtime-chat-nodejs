@@ -5,7 +5,6 @@ import { io } from 'socket.io-client';
 function Chat({socket, username, room, setChatIsOpen }) {
 
     const [mensagensChat, setMensagensChat] = useState([]);
-    const [isAloneinRoom, setIsAloneInRoom] = useState(true);
     const [usersInRoom, setUsersInRoom] = useState(0);
     const mensagemRef = useRef()
     let mensagemConfig = {}
@@ -44,8 +43,8 @@ function Chat({socket, username, room, setChatIsOpen }) {
         socket.on("clients-in-room", async data =>{
             
             setUsersInRoom(data.clientsInRoom)
-            data.isAloneInRoom ? setIsAloneInRoom(true) : setIsAloneInRoom(false)
-            console.log(data)
+            
+            console.log(usersInRoom)
         })
     
         return () => {
@@ -64,9 +63,9 @@ function Chat({socket, username, room, setChatIsOpen }) {
                 <input type="text" placeholder='Mensagem' ref={mensagemRef} />
                 <input type="submit" value="Enviar" />
             </form>
-                {!isAloneinRoom ? 
+                {usersInRoom > 1  ? 
                     <div>
-                        <h2>Você e mais {usersInRoom - 1 || 0} estão conectados nessa sala</h2>
+                        <h2>Você e mais {usersInRoom - 1 } estão conectados nessa sala</h2>
                     </div>
                     :
                     <div>
