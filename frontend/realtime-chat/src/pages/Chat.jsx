@@ -37,7 +37,8 @@ function Chat({socket, username, room, setChatIsOpen }) {
         socket.on("receive-message", async(data) => {
             
           await setMensagensChat((current) => [...current, data] )
-          console.log(data)
+          const chatContainer = document.getElementById('chat-container');
+          chatContainer.scrollTop = chatContainer.scrollHeight;
         })
         
         socket.on("join-chat", async data =>{
@@ -59,7 +60,7 @@ function Chat({socket, username, room, setChatIsOpen }) {
       }, [socket, mensagensChat])
 
     return (
-        <div className=' bg-slate-50/60 h-screen  w-screen flex flex-col  '>
+        <div className=' bg-slate-50/60 h-screen  w-screen flex flex-col items-center '>
 
             <nav className=' bg-purple-900 w-full  p-5  flex items-center justify-between'>
 
@@ -77,7 +78,7 @@ function Chat({socket, username, room, setChatIsOpen }) {
            
                 {usersInRoom > 1  ? 
                     
-                        <h2 className=' bg-gray-600 rounded-xl p-1 lg:p-1.5 px-2 text-center m-2 text-lg font-semibold text-white' >Você e mais {usersInRoom - 1 } estão conectados nessa sala</h2>
+                        <h2 className='  bg-gray-600 rounded-xl p-1 lg:p-1.5 px-2 text-center m-2 text-lg font-semibold text-white' >Você e mais {usersInRoom - 1 } estão conectados nessa sala</h2>
                    
                     :
                    
@@ -86,34 +87,34 @@ function Chat({socket, username, room, setChatIsOpen }) {
                 }
             
 
-            <div className='px-3 pb-32 flex flex-col gap-1 items-center overflow-y-scroll'>
+            <div id='chat-container' className=' max-w-7xl px-3 pb-16 w-screen h-full flex flex-col gap-1 items-center overflow-y-scroll'>
                 {mensagensChat.map(message => (
                     message instanceof Object ? (
 
                         message.userId == userIdLogado ? (
-                        <div className=' w-full  p-2.5 flex flex-col items-end gap-1 ' key={message.id}>
-                            <h2>Você</h2>
-                            <h3 className='bg-purple-800 max-w-min py-1 px-3 rounded-lg text-white '>{message.mensagem}</h3>
+                        <div className=' w-full p-2.5  flex flex-col items-end gap-1 ' key={message.id}>
+                            <h2 className='font-semibold'>Você</h2>
+                            <h3 className='bg-purple-800 text-sm max-w-xs sm:max-w-sm sm:text-base   py-1 px-3 rounded-lg text-white '>{message.mensagem}</h3>
                         </div>
 
                         ) : (
 
-                        <div className='  w-full  p-2.5 flex flex-col items-start gap-1 '  key={message.id}>
-                            <h2>{message.username}</h2>
-                            <h3 className='bg-purple-800 max-w-min py-1 px-3 rounded-lg text-white'>{message.mensagem}</h3>
+                        <div className='  w-full p-2.5  flex flex-col items-start gap-1 '  key={message.id}>
+                            <h2  className='font-semibold'>{message.username}</h2>
+                            <h3 className='bg-purple-800 text-sm max-w-xs sm:max-w-sm sm:text-base  py-1 px-3 rounded-lg text-white'>{message.mensagem}</h3>
                         </div>
                         )
 
                     ) : (
                         <div key={message.id}>
-                            <p className=' bg-gray-600 p-1.5 text-xs px-4 my-1.5 font-semibold text-white rounded-xl'>{message}</p>
+                            <p className=' bg-gray-600 p-1.5 text-xs px-4 my-1.5 font-semibold text-white rounded-xl'>{message} </p>
                         </div>
                     )
                 ))}
 
             </div>
 
-            <form className='w-screen fixed bottom-4 py-5 px-3 flex itens-center justify-center gap-3' onSubmit={handleSubmitMessage}>
+            <form className='w-screen bottom-4 py-5 px-3 flex itens-center justify-center gap-3' onSubmit={handleSubmitMessage}>
 
                 <input
                 className='w-full max-w-7xl rounded-3xl border-0 py-3 px-4 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400  sm:text-sm sm:leading-6'
