@@ -41,10 +41,11 @@ io.on("connection", socket => {
     })
 
     socket.on("leaving-room", data =>{
+        
         socket.leave(data.room);
 
         io.to(data.room).emit("join-chat", `${data.username} saiu do chat!`)
-
+        console.log(roomConfig.clientsInRoom)
         roomConfig.isAloneInRoom = roomConfig.clientsInRoom && roomConfig.clientsInRoom.size > 1 ? false : true;
 
         io.to(userConfig.room).emit("clients-in-room", roomConfig.isAloneInRoom)

@@ -2,12 +2,16 @@ import React from 'react';
 import { useState,useEffect, useRef } from 'react';
 import { useParams } from 'react-router';
 import { io } from 'socket.io-client';
-import {SendHorizonal, Users, LogOut} from 'lucide-react'
+import copy from 'clipboard-copy'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import {SendHorizonal, Users, LogOut, Link2, Link} from 'lucide-react'
 
 function Chat({socket, username, room, setChatIsOpen }) {
 
     const [mensagensChat, setMensagensChat] = useState([]);
     const [usersInRoom, setUsersInRoom] = useState(0);
+    const [linkRoom, setLinkRoom] = useState(`http://127.0.0.1:5173/roominvite/${room}`)
     const mensagemRef = useRef()
     let mensagemConfig = {}
     let userIdLogado = socket.id
@@ -32,6 +36,11 @@ function Chat({socket, username, room, setChatIsOpen }) {
         setChatIsOpen(false)
       }
 
+      const CopyClick = ()=>{
+        copy(linkRoom)
+        toast("Link da sala copiado!")
+      }
+
       useEffect(()=>{
 
         socket.on("receive-message", async(data) => {
@@ -48,7 +57,7 @@ function Chat({socket, username, room, setChatIsOpen }) {
         socket.on("clients-in-room", async data =>{
             
             setUsersInRoom(data.clientsInRoom)
-            
+            console.log(data.clientsInRoom)
         })
     
         return () => {
@@ -62,6 +71,8 @@ function Chat({socket, username, room, setChatIsOpen }) {
     return (
         <div className=' bg-slate-50/60 h-screen  w-screen flex flex-col items-center '>
 
+            
+
             <nav className=' bg-purple-900 w-full  p-5  flex items-center justify-between'>
 
                 <button onClick={exitRoom}>
@@ -70,10 +81,12 @@ function Chat({socket, username, room, setChatIsOpen }) {
 
                 <h1 className='text-white text-lg font-semibold'>Sala {room}</h1>
 
-                <button>
-                    <Users color='white'/>
+                <button onClick={CopyClick}>
+                    <Link color='white' size={28} />
                 </button>
             </nav>
+
+            <ToastContainer />
 
            
                 {usersInRoom > 1  ? 
