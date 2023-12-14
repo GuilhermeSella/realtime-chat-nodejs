@@ -92,21 +92,21 @@ function Chat({socket, username, room, setChatIsOpen }) {
                     message instanceof Object ? (
 
                         message.userId == userIdLogado ? (
-                        <div className=' w-full p-2.5  flex flex-col items-end gap-1 ' key={message.id}>
+                        <div className=' w-full p-2.5  flex flex-col items-end gap-1 ' key={message.key}>
                             <h2 className='font-semibold'>Você</h2>
                             <h3 className='bg-purple-800 text-sm max-w-xs sm:max-w-sm sm:text-base   py-1 px-3 rounded-lg text-white '>{message.mensagem}</h3>
                         </div>
 
                         ) : (
 
-                        <div className='  w-full p-2.5  flex flex-col items-start gap-1 '  key={message.id}>
+                        <div className='  w-full p-2.5  flex flex-col items-start gap-1 '  key={message.key}>
                             <h2  className='font-semibold'>{message.username}</h2>
                             <h3 className='bg-purple-800 text-sm max-w-xs sm:max-w-sm sm:text-base  py-1 px-3 rounded-lg text-white'>{message.mensagem}</h3>
                         </div>
                         )
 
                     ) : (
-                        <div key={message.id}>
+                        <div key={message.key}>
                             <p className=' bg-gray-600 p-1.5 text-xs px-4 my-1.5 font-semibold text-white rounded-xl'>{message} </p>
                         </div>
                     )

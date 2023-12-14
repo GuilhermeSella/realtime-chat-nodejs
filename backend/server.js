@@ -20,9 +20,12 @@ io.on("connection", socket => {
         socket.join(userConfig.room)
         io.to(userConfig.room).emit("join-chat", `${userConfig.username} entrou no chat!`)
 
-         roomConfig.clientsInRoom = io.sockets.adapter.rooms.get(userConfig.room);
         
-         roomConfig.isAloneInRoom = roomConfig.clientsInRoom && roomConfig.clientsInRoom.size > 1 ? false : true;
+
+         roomConfig.clientsInRoom = io.sockets.adapter.rooms.get(userConfig.room);
+         console.log(roomConfig.clientsInRoom)
+        
+        //  roomConfig.isAloneInRoom = roomConfig.clientsInRoom && roomConfig.clientsInRoom.size > 1 ? false : true;
          
          roomConfig.clientsInRoom = roomConfig.clientsInRoom.size;
 
